@@ -1,6 +1,6 @@
 # A Belief Description
 
-This project wraps c++11 implemented linear model prediction and daemon (timing update). It assumes a linear model has been trained by learning algorithms of [Vowpal Wabbit](https://github.com/JohnLangford/vowpal_wabbit/wiki) (e.g., FTRL, BFGS). One straightforward application is online module of click-through rate prediction.
+This project wraps c++11 implementation of vw trained linear model prediction and daemon (timing update). It assumes a linear model has been trained by learning algorithms of [Vowpal Wabbit](https://github.com/JohnLangford/vowpal_wabbit/wiki) (e.g., FTRL, BFGS). One straightforward application is online module of click-through rate prediction.
 
 # Support Swig Interface
 
