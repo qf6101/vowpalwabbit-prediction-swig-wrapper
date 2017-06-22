@@ -6,18 +6,30 @@
 #define PCTR_CTR_PREDICTION_H
 
 
+#include "feature/feature_engineering_user_doc_similarity.h"
+#include "feature/feature_engineering_recent_docs_similarity.h"
 #include "attribute/user_profile.h"
 #include "attribute/context_info.h"
 #include "attribute/doc_attributes.h"
 #include "model/model_daemon.h"
+#include <memory>
+
 
 class linear_predictor {
 public:
-    model_daemon* _daemon = NULL;
-    linear_predictor(string model_path, int update_interval = 30);
+    // spdlog logger
+    shared_ptr<spdlog::logger> _logger;
+    // swig does not support unique_ptr
+    model_daemon* _daemon = nullptr;
+    feature_engineering_user_doc_similarity* _fe_user_doc_sim = nullptr;
+    feature_engineering_recent_docs_similarity* _fe_recent_docs_sim = nullptr;
+    bool _started = false;
+
+    linear_predictor();
+    linear_predictor(const string& model_path, const string& w2v_model_path, int update_interval = 30);
     virtual ~linear_predictor();
-    float logistic_predict(user_profile& user, context_info& cxt, doc_attributes& doc);
-    float test(user_profile& user, context_info& cxt, doc_attributes& doc);
+    float logistic_predict (const user_profile& user, const context_info& cxt, const doc_attributes& doc) const;
+    float test (const user_profile& user, const context_info& cxt, const doc_attributes& doc) const;
 };
 
 

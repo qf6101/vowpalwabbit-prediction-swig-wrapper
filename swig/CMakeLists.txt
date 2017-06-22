@@ -14,11 +14,13 @@ set(CMAKE_SWIG_FLAGS -package io.github.qf6101.pctrswig)
 set_source_files_properties(pctr.i PROPERTIES CPLUSPLUS ON)
 # add head files
 include_directories(${PROJECT_SOURCE_DIR}/core/include)
+include_directories(${PROJECT_SOURCE_DIR}/externals/include)
 # add swig files
-swig_add_module(
+swig_add_library(
         pctr_swig
-        java
-        pctr.i
+        TYPE SHARED
+        LANGUAGE java
+        SOURCES pctr.i
 )
 # link to core sub projects
 SWIG_LINK_LIBRARIES(pctr_swig pctr_core)
@@ -29,7 +31,10 @@ add_custom_command(TARGET pctr_swig POST_BUILD
         COMMAND cp ${PROJECT_BINARY_DIR}/swig/*.so ${PROJECT_BINARY_DIR}/swig/lib/
         COMMAND rm -rf ${PROJECT_BINARY_DIR}/swig/java
         COMMAND mkdir ${PROJECT_BINARY_DIR}/swig/java
-        COMMAND cp ${PROJECT_BINARY_DIR}/swig/*.java ${PROJECT_BINARY_DIR}/swig/java/)
+        COMMAND cp ${PROJECT_BINARY_DIR}/swig/*.java ${PROJECT_BINARY_DIR}/swig/java/
+        # create log directory for spdlog
+        COMMAND rm -rf ${PROJECT_BINARY_DIR}/swig/pctr_logs/swig_test
+        COMMAND mkdir -p ${PROJECT_BINARY_DIR}/swig/pctr_logs/swig_test)
 # prepare the test of generated java files and c++ dynamic library
 file(GLOB java_src ${PROJECT_BINARY_DIR}/swig/java/*.java)
 add_jar(pctr_swig_test ${java_src} ${PROJECT_SOURCE_DIR}/swig/pctr_swig_test.java)
@@ -39,5 +44,5 @@ message(STATUS "Jar file ${_jarFile}")
 message(STATUS "Class compiled to ${_classDir}")
 # test invoking swig generated files
 add_test(NAME PctrSwigTest COMMAND ${Java_JAVA_EXECUTABLE} -cp ${_jarFile} -Djava.library.path=${PROJECT_BINARY_DIR}/swig/lib io.github.qf6101.pctrswigtest.PctrSwigTest)
-set_tests_properties(PctrSwigTest PROPERTIES PASS_REGULAR_EXPRESSION "123456")
+set_tests_properties(PctrSwigTest PROPERTIES PASS_REGULAR_EXPRESSION "98765")
 

@@ -8,12 +8,13 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <limits>
 using namespace std;
 
 class recent_doc {
 public:
     string doc_id;
-    long time;
+    unsigned long time = 0;
     vector<pair<string, float>> categories;
     vector<pair<string, float>> keywords;
 };

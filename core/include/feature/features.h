@@ -7,7 +7,9 @@
 
 #include <Eigen/Sparse>
 #include <string>
+#include <memory>
 #include <boost/optional.hpp>
+#include "feature_hash.h"
 
 using namespace std;
 using boost::optional;
@@ -15,6 +17,7 @@ using boost::none;
 
 class features {
 public:
+    const feature_hash& _hash;
     optional<string> _user_id = none;
     optional<string> _doc_id = none;
     optional<long> _time = none;
@@ -31,7 +34,6 @@ public:
     optional<short> _hour_desc = none;
     optional<string> _doc_type = none;
     optional<float> _hotness = none;
-    optional<string> _position = none;
     optional<float> _quality = none;
     optional<float> _vulgar = none;
     optional<string> _doc_location0 = none;
@@ -74,7 +76,9 @@ public:
     optional<float> _recent_doc_10min_avg_vulgar = none;
     optional<float> _recent_doc_longtime_avg_vulgar = none;
 
-    void to_vw(Eigen::SparseVector<float>** vw_features);
+    features(const feature_hash& hash) : _hash(hash){}
+
+    unique_ptr<Eigen::SparseVector<float>> to_vw();
 };
 
 

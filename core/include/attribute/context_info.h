@@ -13,7 +13,7 @@ using namespace std;
 
 class context_info {
 public:
-    long time;
+    unsigned long time = 0;
     string platform;
     string network;
     string brand;

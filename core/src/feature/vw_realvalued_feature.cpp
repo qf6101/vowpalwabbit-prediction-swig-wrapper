@@ -4,14 +4,14 @@
 
 #include "feature/vw_realvalued_feature.h"
 
-vw_realvalued_feature::vw_realvalued_feature(string ns, string name, optional<float> value) {
+vw_realvalued_feature::vw_realvalued_feature(const string& ns, const string& name, optional<float> value) {
     _ns = ns;
     _name = name;
     _value = value;
 }
 
-vw_realvalued_feature::vw_realvalued_feature(string ns,
-                                             string name,
+vw_realvalued_feature::vw_realvalued_feature(const string& ns,
+                                             const string& name,
                                              optional<float> diff_lhs,
                                              optional<float> diff_rhs) {
     if (diff_lhs && diff_rhs) {

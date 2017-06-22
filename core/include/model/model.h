@@ -10,8 +10,9 @@
 
 class model {
 public:
-    virtual float logistic_predict(Eigen::SparseVector<float>& sample) = 0;
+    virtual float logistic_predict(const Eigen::SparseVector<float>& sample) = 0;
     virtual ~model() {};
+    virtual uint64_t weight_size() = 0;
 };
 
 

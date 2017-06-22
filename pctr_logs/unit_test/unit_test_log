@@ -1,0 +1,74 @@
+[2017-06-22 20:53:27.730] [pctr_unit_test_logger] [info] Successfully initialized spdlog logger.
+
+[2017-06-22 20:53:29.182] [pctr_unit_test_logger] [info] Natively loaded word2vec model from test/data/word2vec.sample.vec.
+[2017-06-22 20:53:29.185] [pctr_unit_test_logger] [info] Initialize word2vec model with embeddings size=7391
+[2017-06-22 20:53:32.490] [pctr_unit_test_logger] [info] Natively loaded word2vec model from test/data/word2vec.sample.vec.
+[2017-06-22 20:53:32.494] [pctr_unit_test_logger] [info] Initialize word2vec model with embeddings size=7391
+[2017-06-22 20:53:33.207] [pctr_unit_test_logger] [info] Initialize linear model with weight_size=262144.
+[2017-06-22 20:53:33.207] [pctr_unit_test_logger] [info] Leave linear model.
+[2017-06-22 20:53:33.207] [pctr_unit_test_logger] [info] Initialize model daemon with model path=test/data/vw_model.txt, model type=linear_model, w2v model path=test/data/word2vec_model.txt and update interval=1.
+[2017-06-22 20:53:33.207] [pctr_unit_test_logger] [info] Initialize linear model with weight_size=262144.
+[2017-06-22 20:53:33.226] [pctr_unit_test_logger] [info] Natively loaded linear model from test/data/vw_model.txt.
+[2017-06-22 20:53:33.226] [pctr_unit_test_logger] [info] Factory loaded linear model for model daemon.
+[2017-06-22 20:53:33.226] [pctr_unit_test_logger] [info] Leave linear model.
+[2017-06-22 20:53:33.226] [pctr_unit_test_logger] [info] Leave model daemon.
+[2017-06-22 20:53:33.226] [pctr_unit_test_logger] [info] Initialize model daemon with model path=test/data/vw_model.txt, model type=linear_model, w2v model path=test/data/word2vec_model.txt and update interval=1.
+[2017-06-22 20:53:33.226] [pctr_unit_test_logger] [info] Detected model file was modified from 30 to 1498135648 in model daemon.
+[2017-06-22 20:53:33.226] [pctr_unit_test_logger] [info] Initialize linear model with weight_size=262144.
+[2017-06-22 20:53:33.245] [pctr_unit_test_logger] [info] Natively loaded linear model from test/data/vw_model.txt.
+[2017-06-22 20:53:33.245] [pctr_unit_test_logger] [info] Factory loaded linear model for model daemon.
+[2017-06-22 20:53:33.245] [pctr_unit_test_logger] [info] Leave linear model.
+[2017-06-22 20:53:33.245] [pctr_unit_test_logger] [info] Leave model daemon.
+[2017-06-22 20:53:33.245] [pctr_unit_test_logger] [info] Initialize model daemon with model path=test/data/vw_model.txt, model type=linear_model, w2v model path=test/data/word2vec_model.txt and update interval=1.
+[2017-06-22 20:53:35.245] [pctr_unit_test_logger] [info] Leave model daemon.
+[2017-06-22 20:53:35.246] [pctr_unit_test_logger] [info] Natively loaded word2vec model from test/data/word2vec_model.txt.
+[2017-06-22 20:53:35.246] [pctr_unit_test_logger] [info] Initialize word2vec model with embeddings size=3
+[2017-06-22 20:53:35.246] [pctr_unit_test_logger] [error] Fail to natively load word2vec model from test/data/word2vec_model.bad.txt, detail: basic_ios::clear: iostream error
+[2017-06-22 20:53:35.246] [pctr_unit_test_logger] [error] Fail to natively load word2vec model from test/data/word2vec_model.no_such_file.txt, detail: basic_ios::clear: iostream error
+[2017-06-22 20:53:35.246] [pctr_unit_test_logger] [info] Initialize model daemon with model path=test/data/vw_model.txt, model type=linear_model, w2v model path=test/data/word2vec_model.txt and update interval=1.
+[2017-06-22 20:53:35.246] [pctr_unit_test_logger] [info] Initialize linear model with weight_size=262144.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Natively loaded linear model from test/data/vw_model.txt.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Factory loaded linear model for model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Detected model file was modified from -4739116371563938165 to 1498135648 in model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Finish loading core model for model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Finish initializing feature hash for model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Natively loaded word2vec model from test/data/word2vec_model.txt.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Initialize word2vec model with embeddings size=3
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Finish loading word2vec model for model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Finish initializing daemon thread for model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Successfully start model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Finish starting model daemon with model path=test/data/vw_model.txt, word2vec path=test/data/word2vec_model.txt and update interval=1.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Finish initializing feature engineering with hash_size=262144 and jaccard_min_weight=0.1
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Interrupt the update model thread for model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Finish stop daemon thread for model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Successfully stop model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Leave model daemon.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Leave linear model.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Leave linear predictor.
+[2017-06-22 20:53:35.267] [pctr_unit_test_logger] [info] Initialize model daemon with model path=test/data/vw_model.txt, model type=linear_model, w2v model path=test/data/word2vec_model.txt and update interval=1.
+[2017-06-22 20:53:35.268] [pctr_unit_test_logger] [info] Initialize linear model with weight_size=262144.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Natively loaded linear model from test/data/vw_model.txt.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Factory loaded linear model for model daemon.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Detected model file was modified from 0 to 1498135648 in model daemon.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Finish loading core model for model daemon.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Finish initializing feature hash for model daemon.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Natively loaded word2vec model from test/data/word2vec_model.txt.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Initialize word2vec model with embeddings size=3
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Finish loading word2vec model for model daemon.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Finish initializing daemon thread for model daemon.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Successfully start model daemon.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Finish starting model daemon with model path=test/data/vw_model.txt, word2vec path=test/data/word2vec_model.txt and update interval=1.
+[2017-06-22 20:53:35.288] [pctr_unit_test_logger] [info] Finish initializing feature engineering with hash_size=262144 and jaccard_min_weight=0.1
+[2017-06-22 20:53:39.288] [pctr_unit_test_logger] [info] Detected model file was modified from 1498135648 to 1498136018 in model daemon.
+[2017-06-22 20:53:39.288] [pctr_unit_test_logger] [info] Initialize linear model with weight_size=262144.
+[2017-06-22 20:53:39.309] [pctr_unit_test_logger] [info] Natively loaded linear model from test/data/vw_model.txt.
+[2017-06-22 20:53:39.309] [pctr_unit_test_logger] [info] Factory loaded linear model for model daemon.
+[2017-06-22 20:53:39.309] [pctr_unit_test_logger] [info] Leave linear model.
+[2017-06-22 20:53:39.309] [pctr_unit_test_logger] [info] Finish resetting core model for model daemon.
+[2017-06-22 20:53:39.309] [pctr_unit_test_logger] [info] Successfully update model for model daemon.
+[2017-06-22 20:53:41.288] [pctr_unit_test_logger] [info] Interrupt the update model thread for model daemon.
+[2017-06-22 20:53:41.288] [pctr_unit_test_logger] [info] Finish stop daemon thread for model daemon.
+[2017-06-22 20:53:41.288] [pctr_unit_test_logger] [info] Successfully stop model daemon.
+[2017-06-22 20:53:41.289] [pctr_unit_test_logger] [info] Leave model daemon.
+[2017-06-22 20:53:41.289] [pctr_unit_test_logger] [info] Leave linear model.
+[2017-06-22 20:53:41.289] [pctr_unit_test_logger] [info] Leave linear predictor.

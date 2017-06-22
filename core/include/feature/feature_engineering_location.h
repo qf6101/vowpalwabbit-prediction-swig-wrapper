@@ -13,7 +13,8 @@
 
 class feature_engineering_location {
 public:
-    static void fill_features(features& f, user_profile& user, context_info& cxt, doc_attributes& doc);
+    static void fill_features(features& f, const user_profile& user, const context_info& cxt, const doc_attributes& doc);
+    static vector<string> parse_doc_location(const string& doc_position);
 };
 
 

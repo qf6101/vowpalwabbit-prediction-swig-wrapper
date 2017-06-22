@@ -6,32 +6,36 @@
 #define PCTR_LINEAR_MODE_DAEMON_H
 
 #include "model.h"
+#include "word2vec_model.h"
 #include <string>
 #include <boost/thread/thread.hpp>
 #include <Eigen/Sparse>
-#include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/sinks/text_file_backend.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-#include <boost/log/sources/record_ostream.hpp>
+#include <feature/feature_hash.h>
+#include <spdlog/logger.h>
 
-using namespace boost::log::trivial;
 using namespace std;
 
 class model_daemon {
 public:
-    model* _model = NULL;
+    // spdlog logger
+    shared_ptr<spdlog::logger> _logger;
+    // predict model
+    shared_ptr<model> _model;
     string _model_path;
     string _model_type;
+    // feature hash
+    unique_ptr<feature_hash> _hash;
+    // word2vec model
+    unique_ptr<word2vec_model> _w2v_model;
+    string _w2v_model_path;
+    // daemon thread
+    unique_ptr<boost::thread> _daemon_thread;
+    // configuration
     uint32_t _update_interval;
     timespec _last_mod_time;
-    boost::thread* _daemon_thread;
-    boost::log::sources::severity_logger<severity_level> _logger;
 
-    model_daemon(string model_path, string model_type, uint32_t update_interval = 30);
+    model_daemon(const string& model_path, const string& model_type, const string& w2v_model_path,
+                 uint32_t update_interval);
 
     virtual ~model_daemon();
 
@@ -43,9 +47,9 @@ public:
 
     bool is_model_file_modified();
 
-    bool load_model(model** output_model);
+    shared_ptr<model> load_model();
 
-    float logistic_predict(Eigen::SparseVector<float>& sample);
+    float logistic_predict(const Eigen::SparseVector<float>& sample);
 };
 
 

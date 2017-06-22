@@ -3,43 +3,67 @@
 //
 
 #include "model/model_daemon.h"
-#include "config/configuration.h"
 #include <sys/stat.h>
 #include <boost/algorithm/string.hpp>
-#include <limits>
-#include <boost/log/expressions.hpp>
+#include <log/pctr_log.h>
+#include <boost/filesystem/operations.hpp>
 #include "model/linear_model.h"
 
-model_daemon::model_daemon(string model_path, string model_type, uint32_t update_interval) {
+model_daemon::model_daemon(const string &model_path, const string &model_type, const string &w2v_model_path,
+                           uint32_t update_interval) {
     _model_path = model_path;
     _model_type = model_type;
+    _w2v_model_path = w2v_model_path;
     _update_interval = update_interval;
+    _logger = spdlog::get(pctr_log::_core_logger_name);
+    _logger->info(
+            "Initialize model daemon with model path={}, model type={}, w2v model path={} and update interval={}.",
+            model_path, model_type, w2v_model_path, update_interval);
 }
 
 model_daemon::~model_daemon() {
-    if (_model != NULL) delete _model;
+    _logger->info("Leave model daemon.");
 }
 
 bool model_daemon::start() {
-    model *new_model = NULL;
-    if (load_model(&new_model)) {
-        _model = new_model;
+    if (auto new_model = load_model()) {
+        // load model
+        _model.swap(new_model);
+        new_model.reset();
         is_model_file_modified();
+        _logger->info("Finish loading core model for model daemon.");
+        // initialize feature hash
+        _hash.reset(new feature_hash(_model->weight_size()));
+        _logger->info("Finish initializing feature hash for model daemon.");
+        // load word2vec model
+        if (auto w2v_model = word2vec_model::load_model(_w2v_model_path)) {
+            _w2v_model = std::move(w2v_model);
+            _logger->info("Finish loading word2vec model for model daemon.");
+        } else {
+            _model.reset();
+            _hash.release();
+            _logger->info("Fail to start model daemon due to word2vec model.");
+            return false;
+        }
+        // start daemon thread
         boost::function0<void> f = boost::bind(&model_daemon::update_model, this);
-        _daemon_thread = new boost::thread(f);
+        _daemon_thread.reset(new boost::thread(f));
+        _logger->info("Finish initializing daemon thread for model daemon.");
+        _logger->info("Successfully start model daemon.");
         return true;
     } else {
-        BOOST_LOG_SEV(_logger, fatal) << "Fail to load model when initializing!";
+        _logger->error("Fail to start model daemon due to core model.");
         return false;
-        float logistic_predict(Eigen::SparseVector<float> &sample);
     }
 }
 
 void model_daemon::stop() {
-    if (_daemon_thread != NULL) {
+    if (_daemon_thread) {
         _daemon_thread->interrupt();
         _daemon_thread->join();
+        _logger->info("Finish stop daemon thread for model daemon.");
     }
+    _logger->info("Successfully stop model daemon.");
 }
 
 void model_daemon::update_model() {
@@ -48,56 +72,59 @@ void model_daemon::update_model() {
         try {
             boost::this_thread::sleep(boost::posix_time::seconds(_update_interval));
             if (is_model_file_modified()) {
-                model *new_model = NULL;
-                if (load_model(&new_model)) {
-                    model *old_model = _model;
-                    _model = new_model;
-                    delete old_model;
-                    BOOST_LOG_SEV(_logger, info) << "Successfully updated the model!";
+                if (auto new_model = load_model()) {
+                    // replace model
+                    _model.swap(new_model);
+                    new_model.reset();
+                    _logger->info("Finish resetting core model for model daemon.");
+                    // resize feature hash
+                    if (_hash->size() != _model->weight_size()) {
+                        auto old_size = _hash->size();
+                        _hash->resize(_model->weight_size());
+                        _logger->info("Finish resetting feature size from {} to {}", old_size, _model->weight_size());
+                    }
+                    _logger->info("Successfully update model for model daemon.");
                 }
             }
         } catch (boost::thread_interrupted &ex) {
             continue_loop = false;
-            BOOST_LOG_SEV(_logger, info) << "Interrupt the update model thread!";
+            _logger->info("Interrupt the update model thread for model daemon.");
         } catch (exception &ex) {
-            BOOST_LOG_SEV(_logger, error) << "Fail to update model: " << ex.what();
+            _logger->error("Fail to update model for model daemon.");
         }
     }
 }
 
 bool model_daemon::is_model_file_modified() {
+    if(!boost::filesystem::exists(_model_path)) return false;
+
     struct stat result;
     if (stat(_model_path.c_str(), &result) == 0) {
         timespec &mod_time = result.st_mtim;
         if (mod_time.tv_sec != _last_mod_time.tv_sec) {
+            auto old_time = _last_mod_time;
             _last_mod_time = mod_time;
+            _logger->info("Detected model file was modified from {} to {} in model daemon.",
+                          old_time.tv_sec, mod_time.tv_sec);
             return true;
         }
+        _logger->debug("Detected model file unchanged. Current model file was modified at {}.", _last_mod_time.tv_sec);
     }
     return false;
 }
 
-bool model_daemon::load_model(model **output_model) {
+shared_ptr<model> model_daemon::load_model() {
     if (_model_type == "linear_model") {
-        linear_model *output_linear_model = NULL;
-        bool load_succ = linear_model::load_model(_model_path, &output_linear_model);
-        if (load_succ) {
-            *output_model = output_linear_model;
-            return true;
-        } else if (output_linear_model != NULL) {
-            delete output_linear_model;
-            BOOST_LOG_SEV(_logger, error) << "Fail to load model for model daemon: "
-                                          << _model_path
-                                          << ", "
-                                          << _model_type;
-        }
+        auto output_linear_model = linear_model::load_model(_model_path);
+        _logger->info("Factory loaded linear model for model daemon.");
+        return output_linear_model;
     } else {
-        BOOST_LOG_SEV(_logger, error) << "Wrong model type configured: " << _model_type;
+        _logger->info("Wrong model type configured: {} for model daemon.", _model_type);
+        return nullptr;
     }
-    return false;
 }
 
-float model_daemon::logistic_predict(Eigen::SparseVector<float> &sample) {
-    if (_model != NULL) return _model->logistic_predict(sample);
+float model_daemon::logistic_predict(const Eigen::SparseVector<float>& sample) {
+    if (_model) return _model->logistic_predict(sample);
     else return std::numeric_limits<float>::quiet_NaN();
 }

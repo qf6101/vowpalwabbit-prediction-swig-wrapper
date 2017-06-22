@@ -7,11 +7,18 @@
 
 #include "model.h"
 #include <Eigen/Sparse>
+#include <memory>
+#include <boost/optional.hpp>
+#include <spdlog/logger.h>
+
+using boost::optional;
 
 using namespace std;
 
-class linear_model: public model {
+class linear_model : public model {
 public:
+    shared_ptr<spdlog::logger> _logger;
+
     Eigen::SparseVector<float> _weights;
 
     linear_model(uint64_t weight_size);
@@ -24,11 +31,11 @@ public:
 
     void update_weight(uint64_t index, float value);
 
-    float margin(Eigen::SparseVector<float>& sample);
+    float margin(const Eigen::SparseVector<float>& sample);
 
-    float logistic_predict(Eigen::SparseVector<float>& sample);
+    float logistic_predict(const Eigen::SparseVector<float>& sample);
 
-    static bool load_model(string model_path, linear_model **output_model);
+    static shared_ptr<linear_model> load_model(const string& model_path);
 };
 
 

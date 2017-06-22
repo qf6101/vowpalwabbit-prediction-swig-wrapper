@@ -18,10 +18,10 @@ public:
     string _ns;
     optional<string> _name = none;
 
-    vw_categorical_feature(string ns, optional<string> name, optional<string> name_prefix = none);
-    vw_categorical_feature(string ns, string name, optional<int> value, optional<string> format = none);
-    vw_categorical_feature(string ns, string name, optional<short> value, optional<string> format = none);
-    vw_categorical_feature(string ns, string name, optional<bool> value, bool maybe_missing = false);
+    vw_categorical_feature(const string& ns, const optional<string>& name, const optional<string>& name_prefix = none);
+    vw_categorical_feature(const string& ns, const string& name, const optional<int> value, const optional<string>& format = none);
+    vw_categorical_feature(const string& ns, const string& name, const optional<short> value, const optional<string>& format = none);
+    vw_categorical_feature(const string& ns, const string& name, const optional<bool> value, bool maybe_missing = false);
     optional<tuple<string, string, float>> dumps();
 };
 

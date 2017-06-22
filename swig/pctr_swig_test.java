@@ -1,5 +1,6 @@
 package io.github.qf6101.pctrswigtest;
 
+import io.github.qf6101.pctrswig.pctr_log;
 import io.github.qf6101.pctrswig.recent_doc;
 import io.github.qf6101.pctrswig.kv_pair;
 import io.github.qf6101.pctrswig.pair_vector;
@@ -11,7 +12,10 @@ import io.github.qf6101.pctrswig.linear_predictor;
 
 class PctrSwigTest {
     public static void main(String[] args) {
-        linear_predictor predictor = new linear_predictor("", 30);
+        String loggerName = "pctr_swig_test_logger";
+        String loggerFileName = "pctr_logs/swig_test/swig_test_log";
+        pctr_log.create_loggers(loggerName, loggerFileName);
+        linear_predictor predictor = new linear_predictor();
         user_profile user = new user_profile();
         user.setUser_id("abc");
         user.setGender("male");
@@ -19,6 +23,7 @@ class PctrSwigTest {
         rectdoc_vector rdoc_vec = new rectdoc_vector();
         recent_doc rdoc = new recent_doc();
         rdoc.setDoc_id("res");
+        rdoc.setTime(98765);
         rdoc_vec.add(rdoc);
         context_info cxt = new context_info();
         cxt.setTime(123456);

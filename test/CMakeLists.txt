@@ -1,15 +1,17 @@
-# include head files
+# include head files and link libraries
 include_directories(${PROJECT_SOURCE_DIR}/core/include)
-# add googletest library
-add_subdirectory(googletest)
-include_directories(googletest/googlemock/include)
-include_directories(googletest/googletest/include)
+include_directories(${PROJECT_SOURCE_DIR}/externals/include)
+link_directories(${PROJECT_SOURCE_DIR}/externals/lib/gtest)
 # add test executable
-set(SOURCE_FILES
-        main.cpp
-        test_feature_hashing.cpp
-        test_linear_model.cpp
-        test_model_daemon.cpp
-        test_configuration.cpp)
+file(GLOB src_files "src/*/*.cpp")
+set(SOURCE_FILES ${src_files} src/main.cpp)
 add_executable(pctr_test ${SOURCE_FILES})
-target_link_libraries(pctr_test pctr_core gtest gtest_main)
+target_link_libraries(pctr_test
+        externals
+        pctr_core
+        gtest
+        gtest_main
+        boost_thread
+        boost_system
+        pthread
+        boost_filesystem)

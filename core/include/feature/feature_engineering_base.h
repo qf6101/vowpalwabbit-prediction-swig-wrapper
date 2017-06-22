@@ -12,7 +12,8 @@
 
 class feature_engineering_base {
 public:
-    static void fill_features(features& f, user_profile& user, context_info& cxt, doc_attributes& doc);
+    static void fill_features(features& f, const user_profile& user, const context_info& cxt, const doc_attributes& doc);
+    static optional<string> trim_string(const string& input);
 };
 
 

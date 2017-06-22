@@ -6,7 +6,8 @@
 #include <sstream>
 #include <iomanip>
 
-vw_categorical_feature::vw_categorical_feature(string ns, optional<string> name, optional<string> name_prefix) {
+vw_categorical_feature::vw_categorical_feature(const string &ns, const optional<string> &name,
+                                               const optional<string> &name_prefix) {
     if (name) {
         _ns = ns;
         if (name_prefix) _name = name_prefix.get() + "__" + name.get();
@@ -14,7 +15,8 @@ vw_categorical_feature::vw_categorical_feature(string ns, optional<string> name,
     }
 }
 
-vw_categorical_feature::vw_categorical_feature(string ns, string name, optional<int> value, optional<string> format) {
+vw_categorical_feature::vw_categorical_feature(const string &ns, const string &name, const optional<int> value,
+                                               const optional<string> &format) {
     if (value) {
         _ns = ns;
         if (format) {
@@ -26,7 +28,8 @@ vw_categorical_feature::vw_categorical_feature(string ns, string name, optional<
     }
 }
 
-vw_categorical_feature::vw_categorical_feature(string ns, string name, optional<short> value, optional<string> format) {
+vw_categorical_feature::vw_categorical_feature(const string &ns, const string &name, const optional<short> value,
+                                               const optional<string> &format) {
     if (value) {
         _ns = ns;
         if (format) {
@@ -38,7 +41,8 @@ vw_categorical_feature::vw_categorical_feature(string ns, string name, optional<
     }
 }
 
-vw_categorical_feature::vw_categorical_feature(string ns, string name, optional<bool> value, bool maybe_missing) {
+vw_categorical_feature::vw_categorical_feature(const string &ns, const string &name, const optional<bool> value,
+                                               bool maybe_missing) {
     if (value) {
         _ns = ns;
         if (maybe_missing) {

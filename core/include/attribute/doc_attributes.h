@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <limits>
 using namespace std;
 
 class doc_attributes {
@@ -16,9 +17,11 @@ public:
     string doc_type;
     vector<pair<string, float>> categories;
     vector<pair<string, float>> keywords;
+    string position0;
+    string position1;
+    string position2;
+    unsigned long ptime = 0;
     float hotness = -1;
-    string position;
-    long ptime = -1;
     float quality = -1;
     float vulgar = -1;
 };
