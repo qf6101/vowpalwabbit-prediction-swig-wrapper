@@ -126,5 +126,5 @@ shared_ptr<model> model_daemon::load_model() {
 
 float model_daemon::logistic_predict(const Eigen::SparseVector<float>& sample) {
     if (_model) return _model->logistic_predict(sample);
-    else return std::numeric_limits<float>::quiet_NaN();
+    else return 0;
 }

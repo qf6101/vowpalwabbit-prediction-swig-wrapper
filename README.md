@@ -19,10 +19,9 @@ Copy the include directories to /usr/local/include/ and the libraries to /usr/lo
 # Build Project
 
 ```
+# below two lines need to run again since java swig files were generated in the first round and needed in this round
 cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build
-cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release
-cmake --build build  # build again since java swig files were generated in the first round and needed in this round
-make test
-./build/test/pctr_test  # run test cases
+./build/test/pctr_test  # run unit tests
+make -C build test  # run swig tests
 ```

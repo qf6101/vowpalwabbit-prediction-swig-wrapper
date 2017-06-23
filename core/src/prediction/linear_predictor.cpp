@@ -11,10 +11,11 @@
 
 linear_predictor::linear_predictor() {
     _logger = spdlog::get(pctr_log::_core_logger_name);
+    _logger->info("Initialize linear predictor.");
 }
 
-linear_predictor::linear_predictor(const string &model_path, const string &w2v_model_path, int update_interval) {
-    _logger = spdlog::get(pctr_log::_core_logger_name);
+linear_predictor::linear_predictor(const string &model_path, const string &w2v_model_path, int update_interval)
+        : linear_predictor() {
     _daemon = new model_daemon(model_path, "linear_model", w2v_model_path, update_interval);
     if (_daemon->start()) {
         _logger->info("Finish starting model daemon with model path={}, word2vec path={} and update interval={}.",
@@ -42,20 +43,27 @@ linear_predictor::~linear_predictor() {
     _logger->info("Leave linear predictor.");
 }
 
-float linear_predictor::logistic_predict (const user_profile &user, const context_info &cxt, const doc_attributes &doc) const {
-    // fill features by feature engineering
-    features f(*_daemon->_hash);
-    feature_engineering_base::fill_features(f, user, cxt, doc);
-    feature_engineering_time::fill_features(f, user, cxt, doc);
-    feature_engineering_location::fill_features(f, user, cxt, doc);
-    _fe_user_doc_sim->fill_features(f, user, cxt, doc);
-    _fe_recent_docs_sim->fill_features(f, user, cxt, doc);
-    // encode features with vowpal wabbit feature hash and predict score
-    if (auto vw_features = std::move(f.to_vw())) return _daemon->logistic_predict(*vw_features);
-    else return std::numeric_limits<float>::quiet_NaN();
+float
+linear_predictor::logistic_predict(const user_profile &user, const context_info &cxt, const doc_attributes &doc) const {
+    try {
+        // fill features by feature engineering
+        features f(*_daemon->_hash);
+        feature_engineering_base::fill_features(f, user, cxt, doc);
+        feature_engineering_time::fill_features(f, user, cxt, doc);
+        feature_engineering_location::fill_features(f, user, cxt, doc);
+        _fe_user_doc_sim->fill_features(f, user, cxt, doc);
+        _fe_recent_docs_sim->fill_features(f, user, cxt, doc);
+        // encode features with vowpal wabbit feature hash and predict score
+        if (auto vw_features = std::move(f.to_vw())) return _daemon->logistic_predict(*vw_features);
+        else return 0;
+    } catch (exception &ex) {
+        _logger->debug("Fail to predict score with user id={}, doc id={}, detail: {}.",
+                       user.user_id, doc.doc_id, ex.what());
+        return 0;
+    }
 }
 
-float linear_predictor::test (const user_profile &user, const context_info &cxt, const doc_attributes &doc) const {
+float linear_predictor::test(const user_profile &user, const context_info &cxt, const doc_attributes &doc) const {
     _logger->debug("Trigger test in linear predictor.");
     return cxt.rdocs[0].time;
 }
